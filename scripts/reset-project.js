@@ -1,73 +1,79 @@
-#!/usr/bin/env node
+// import React from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
-/**
- * This script is used to reset the project to a blank state.
- * It moves the /app directory to /app-example and creates a new /app directory with an index.tsx and _layout.tsx file.
- * You can remove the `reset-project` script from package.json and safely delete this file after running it.
- */
+export default function App() {
+  const [inputValue, setInputValue] = React.useState('');
 
-const fs = require('fs');
-const path = require('path');
+  const handleButtonPress = () => {
+    alert(`You entered: ${inputValue}`);
+  };
 
-const root = process.cwd();
-const oldDirPath = path.join(root, 'app');
-const newDirPath = path.join(root, 'app-example');
-const newAppDirPath = path.join(root, 'app');
-
-const indexContent = `import { Text, View } from "react-native";
-
-export default function Index() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>My Basic App</Text>
+      </View>
+
+      <View style={styles.content}>
+        <Text style={styles.label}>Enter something:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Type here..."
+          value={inputValue}
+          onChangeText={setInputValue}
+        />
+        <Button title="Submit" onPress={handleButtonPress} />
+      </View>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Footer Information</Text>
+      </View>
     </View>
   );
 }
-`;
 
-const layoutContent = `import { Stack } from "expo-router";
-
-export default function RootLayout() {
-  return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
-}
-`;
-
-fs.rename(oldDirPath, newDirPath, (error) => {
-  if (error) {
-    return console.error(`Error renaming directory: ${error}`);
-  }
-  console.log('/app moved to /app-example.');
-
-  fs.mkdir(newAppDirPath, { recursive: true }, (error) => {
-    if (error) {
-      return console.error(`Error creating new app directory: ${error}`);
-    }
-    console.log('New /app directory created.');
-
-    const indexPath = path.join(newAppDirPath, 'index.tsx');
-    fs.writeFile(indexPath, indexContent, (error) => {
-      if (error) {
-        return console.error(`Error creating index.tsx: ${error}`);
-      }
-      console.log('app/index.tsx created.');
-
-      const layoutPath = path.join(newAppDirPath, '_layout.tsx');
-      fs.writeFile(layoutPath, layoutContent, (error) => {
-        if (error) {
-          return console.error(`Error creating _layout.tsx: ${error}`);
-        }
-        console.log('app/_layout.tsx created.');
-      });
-    });
-  });
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    padding: 20,
+    backgroundColor: '#f9f9f9',
+  },
+  header: {
+    backgroundColor: '#4CAF50',
+    padding: 15,
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  label: {
+    marginBottom: 10,
+    fontSize: 16,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+  },
+  footer: {
+    backgroundColor: '#4CAF50',
+    padding: 15,
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  footerText: {
+    color: '#fff',
+    fontSize: 16,
+  },
 });
